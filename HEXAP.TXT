@@ -1,0 +1,423 @@
+DECLARE SUB tmr (n!)
+DECLARE SUB fresh ()
+'Contr“le par d‚fault
+rgt$ = "d"
+lft$ = "q"
+up$ = "z"
+down$ = "s"
+Quitt$ = "5"
+POZ$ = "p"
+
+
+PLAY "T255o2Do1GAo2Do1BCFAo2Do1GAo2Do1GAo2Do1BCA"
+Mainmenu:
+CLS
+COLOR 4
+LOCATE 7, 20
+PRINT "*****Menu*****"
+LOCATE 9, 21: PRINT "Jouer (J)"
+LOCATE 10, 21: PRINT "Instructions (I)"
+LOCATE 11, 21: PRINT "Options (O)"
+LOCATE 12, 21: PRINT "Hi-Score (H)"
+LOCATE 13, 21: PRINT "Quitter (Q)"
+
+
+
+DO
+
+
+    SELECT CASE LCASE$(INKEY$)
+        CASE IS = "j"
+            GOTO Games
+
+        CASE IS = "i"
+            GOTO intro
+
+        CASE IS = "o"
+            GOTO Options
+        CASE IS = "h"
+            GOTO HISCORE
+
+        CASE IS = "q"
+            END
+
+    END SELECT
+
+LOOP
+
+Options:
+CLS
+COLOR 6
+LOCATE 7, 20
+PRINT "*****Options*****"
+LOCATE 9, 21: PRINT "Contr“le (C)"
+LOCATE 10, 21: PRINT "Effacer Hi-Score (E)"
+LOCATE 11, 21: PRINT "Retour au menu (R)"
+
+
+
+DO
+
+
+    SELECT CASE LCASE$(INKEY$)
+        CASE IS = "c"
+            PRINT "Def. contr“le:"
+            INPUT "Up: ", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            up$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+            INPUT "Down:", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            down$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+            INPUT "Left:", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            lft$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+            INPUT "Right:", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            rgt$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+            INPUT "Quit:", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            Quitt$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+            INPUT "Pause:", tmp$
+            IF tmp$ = "" THEN PRINT "ERREUR! : Pas de touche programm‚ !": GOTO Mainmenu
+            POZ$ = LEFT$(tmp$, 1)
+            PRINT " Ok!"
+
+
+            GOTO Mainmenu
+
+
+
+        CASE IS = "e"
+
+        CASE IS = "r"
+            GOTO Mainmenu
+
+
+    END SELECT
+
+LOOP
+
+
+
+
+
+
+SLEEP
+
+GOTO Mainmenu
+HISCORE:
+CLS
+COLOR 14
+PRINT , , "        HI-SCORE"
+PRINT
+COLOR 6
+ON ERROR GOTO Er000
+OPEN "SCORE.$$" FOR BINARY AS #1
+tmp$ = INPUT$(1, # 1)
+casea:
+Nms$ = ""
+DO
+    tmp$ = INPUT$(1, # 1)
+    IF tmp$ = "&" THEN EXIT DO
+
+    Nms$ = Nms$ + tmp$
+LOOP
+tep$ = ""
+DO
+    tmp$ = INPUT$(1, # 1)
+    IF tmp$ = "&" THEN EXIT DO
+
+    tep$ = tep$ + tmp$
+LOOP
+tst$ = ""
+DO
+    tmp$ = INPUT$(1, # 1)
+    IF tmp$ = "&" THEN EXIT DO
+
+    tst$ = tst$ + tmp$
+LOOP
+PRINT ".  "; Nms$ + "  " + tst$ + "   " + tep$
+IF EOF(1) <> 1 THEN GOTO casea
+
+
+
+
+SLEEP
+
+GOTO Mainmenu
+
+
+intro:
+CLS
+PRINT
+PRINT
+COLOR 6
+PRINT "[Honte … celui qui ne gagne pas en moin de 2 minute.]"
+PRINT
+PRINT "Voici HexaPuzzle ,Le premier jeu d'informabox." + CHR$(10) + "Dans celui-ci le but est de remettre dans l'ordre les caractŠre, "
+PRINT "c'est un petit casse-tˆte trŠs simple."
+PRINT "Mais comment faire avec le clavier??? " + CHR$(10) + ",‡a c'est dans les options que vous trouverez la r‚ponse!"
+
+
+SLEEP
+
+GOTO Mainmenu
+
+
+Games:
+SCREEN 7
+COLOR 4
+PRINT , , , " HexaPuzzle"
+PLAY "T255o2Do1GAo2Do1BCFAo2Do1GAo2Do1GAo2Do1BCA"
+
+
+
+
+
+
+' RND
+
+RANDOMIZE TIMER
+linechr$ = "123456789ABCDE "
+Lenchr = 15
+finalchr$ = ""
+FOR t = 1 TO 15
+    again:
+    rndnum = INT(RND * 15) + 1
+  
+    FOR e = 1 TO 15
+        IF RIGHT$(LEFT$(finalchr$, e), 1) = RIGHT$(LEFT$(linechr$, rndnum), 1) THEN GOTO again
+    NEXT e
+    finalchr$ = finalchr$ + RIGHT$(LEFT$(linechr$, rndnum), 1)
+   
+    
+     
+
+NEXT t
+COLOR 3
+
+PRINT
+PRINT
+PRINT , "    Par": PRINT
+PRINT , "Cyril Coelho"
+PRINT
+PRINT
+PRINT "             [PRESS ANY KEY] "
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+PRINT
+
+PRINT "        Informabox software - 2011"
+
+a$ = RIGHT$(LEFT$(finalchr$, 1), 1)
+b$ = RIGHT$(LEFT$(finalchr$, 2), 1)
+c$ = RIGHT$(LEFT$(finalchr$, 3), 1)
+d$ = RIGHT$(LEFT$(finalchr$, 4), 1)
+e$ = RIGHT$(LEFT$(finalchr$, 5), 1)
+f$ = RIGHT$(LEFT$(finalchr$, 6), 1)
+g$ = RIGHT$(LEFT$(finalchr$, 7), 1)
+h$ = RIGHT$(LEFT$(finalchr$, 8), 1)
+i$ = RIGHT$(LEFT$(finalchr$, 9), 1)
+j$ = RIGHT$(LEFT$(finalchr$, 10), 1)
+k$ = RIGHT$(LEFT$(finalchr$, 11), 1)
+l$ = RIGHT$(LEFT$(finalchr$, 12), 1)
+m$ = RIGHT$(LEFT$(finalchr$, 13), 1)
+n$ = RIGHT$(LEFT$(finalchr$, 14), 1)
+o$ = RIGHT$(LEFT$(finalchr$, 15), 1)
+SLEEP
+
+Vibr = 1
+CLS
+temp = TIMER
+DO
+    EndPause:
+    tmp0 = INT(TIMER - temp)
+    COLOR 8
+    LOCATE 1, 1: PRINT , , , "Temps: "; tmp0
+    LOCATE 3, 1: PRINT , , , "Tentatives: "; touch
+    COLOR 3
+    IF Vibr = 1 THEN
+        CLS
+        COLOR 8
+        LOCATE 1, 1: PRINT , , , "Crono: "; tmp0
+        COLOR 3
+        LOCATE 5, 1
+        PRINT , , , "[" + a$ + "-" + b$ + "-" + c$ + "]"
+        PRINT , , , "[" + d$ + "-" + e$ + "-" + f$ + "]"
+        PRINT , , , "[" + g$ + "-" + h$ + "-" + i$ + "]"
+        PRINT , , , "[" + j$ + "-" + k$ + "-" + l$ + "]"
+        PRINT , , , "[" + m$ + "-" + n$ + "-" + o$ + "]"
+        Vibr = 0
+    END IF
+
+
+    'SLEEP
+    SELECT CASE LCASE$(INKEY$)
+        CASE IS = lft$ 'Left
+            IF b$ = " " THEN b$ = c$: c$ = " ": GOTO fin0
+            IF a$ = " " THEN a$ = b$: b$ = " ": GOTO fin0
+            IF d$ = " " THEN d$ = e$: e$ = " ": GOTO fin0
+            IF e$ = " " THEN e$ = f$: f$ = " ": GOTO fin0
+            IF g$ = " " THEN g$ = h$: h$ = " ": GOTO fin0
+            IF h$ = " " THEN h$ = i$: i$ = " ": GOTO fin0
+            IF j$ = " " THEN j$ = k$: k$ = " ": GOTO fin0
+            IF k$ = " " THEN k$ = l$: l$ = " ": GOTO fin0
+            IF m$ = " " THEN m$ = n$: n$ = " ": GOTO fin0
+            IF n$ = " " THEN n$ = o$: o$ = " ": GOTO fin0
+            fin0:
+            Vibr = 1
+            touch = touch + 1
+        CASE IS = rgt$ 'Right
+            IF b$ = " " THEN b$ = a$: a$ = " ": GOTO fin1
+            IF c$ = " " THEN c$ = b$: b$ = " ": GOTO fin1
+            IF e$ = " " THEN e$ = d$: d$ = " ": GOTO fin1
+            IF f$ = " " THEN f$ = e$: e$ = " ": GOTO fin1
+            IF h$ = " " THEN h$ = g$: g$ = " ": GOTO fin1
+            IF i$ = " " THEN i$ = h$: h$ = " ": GOTO fin1
+            IF k$ = " " THEN k$ = j$: j$ = " ": GOTO fin1
+            IF l$ = " " THEN l$ = k$: k$ = " ": GOTO fin1
+            IF n$ = " " THEN n$ = m$: m$ = " ": GOTO fin1
+            IF o$ = " " THEN o$ = n$: n$ = " ": GOTO fin1
+            fin1:
+            Vibr = 1
+            touch = touch + 1
+
+
+        CASE IS = down$ 'down
+            IF d$ = " " THEN d$ = a$: a$ = " ": GOTO fin2
+            IF e$ = " " THEN e$ = b$: b$ = " ": GOTO fin2
+            IF f$ = " " THEN f$ = c$: c$ = " ": GOTO fin2
+            IF g$ = " " THEN g$ = d$: d$ = " ": GOTO fin2
+            IF h$ = " " THEN h$ = e$: e$ = " ": GOTO fin2
+            IF i$ = " " THEN i$ = f$: f$ = " ": GOTO fin2
+            IF j$ = " " THEN j$ = g$: g$ = " ": GOTO fin2
+            IF k$ = " " THEN k$ = h$: h$ = " ": GOTO fin2
+            IF l$ = " " THEN l$ = i$: i$ = " ": GOTO fin2
+            IF m$ = " " THEN m$ = j$: j$ = " ": GOTO fin2
+            IF n$ = " " THEN n$ = k$: k$ = " ": GOTO fin2
+            IF o$ = " " THEN o$ = l$: l$ = " ": GOTO fin2
+            fin2:
+            Vibr = 1
+            touch = touch + 1
+        CASE IS = up$ 'up
+            IF a$ = " " THEN a$ = d$: d$ = " ": GOTO fin3
+            IF b$ = " " THEN b$ = e$: e$ = " ": GOTO fin3
+            IF c$ = " " THEN c$ = f$: f$ = " ": GOTO fin3
+            IF d$ = " " THEN d$ = g$: g$ = " ": GOTO fin3
+
+            IF e$ = " " THEN e$ = h$: h$ = " ": GOTO fin3
+            IF f$ = " " THEN f$ = i$: i$ = " ": GOTO fin3
+            IF g$ = " " THEN g$ = j$: j$ = " ": GOTO fin3
+            IF h$ = " " THEN h$ = k$: k$ = " ": GOTO fin3
+
+            IF i$ = " " THEN i$ = l$: l$ = " ": GOTO fin3
+            IF j$ = " " THEN j$ = m$: m$ = " ": GOTO fin3
+            IF k$ = " " THEN k$ = n$: n$ = " ": GOTO fin3
+            IF l$ = " " THEN l$ = o$: o$ = " ": GOTO fin3
+            fin3:
+            Vibr = 1
+            touch = touch + 1
+
+
+        CASE IS = "p"
+            CLS
+            PRINT "Jeu en pause, appuyez sur une touche retourner au jeu."
+            Vibr = 1
+            SVTIMEPAUSE = TIMER
+            DO
+            LOOP WHILE INKEY$ = ""
+            temp = temp + INT(TIMER - SVTIMEPAUSE)
+            GOTO EndPause
+
+
+        CASE IS = Quitt$
+            END
+
+
+
+
+    END SELECT
+
+    IF a$ + b$ + c$ + d$ + e$ + f$ + g$ + h$ + i$ + j$ + k$ + l$ + m$ + n$ + o$ = "123456789ABCDE " THEN EXIT DO
+
+LOOP
+
+gagner:
+'Gagner
+CLS
+LOCATE 5, 1
+PRINT , , , "[" + a$ + "-" + b$ + "-" + c$ + "]"
+PRINT , , , "[" + d$ + "-" + e$ + "-" + f$ + "]"
+PRINT , , , "[" + g$ + "-" + h$ + "-" + i$ + "]"
+PRINT , , , "[" + j$ + "-" + k$ + "-" + l$ + "]"
+PRINT , , , "[" + m$ + "-" + n$ + "-" + o$ + "]"
+
+PRINT "vous avez gagner!"
+DO
+    SELECT CASE tmp0
+        CASE IS >= 60
+            tmp1 = tmp1 + 1
+            tmp0 = tmp0 - 60
+        CASE IS < 60
+            EXIT DO
+    END SELECT
+LOOP
+DO
+    SELECT CASE tmp1
+        CASE IS >= 60
+            tmp2 = tmp2 + 1
+            tmp1 = tmp1 - 60
+        CASE IS < 60
+            EXIT DO
+    END SELECT
+LOOP
+
+BEEP
+PRINT ",en "; tmp2; "H "; tmp1; "M "; tmp0; "S"
+PRINT "et en "; touch; " tentatives"
+nameis0:
+INPUT "Entrez votre pseudo:", Nameis$
+IF LEN(Nameis$) > 5 THEN PRINT "Votre pseudo ne doit pas d‚passer 5 caractŠres.": GOTO nameis0
+OPEN "SCORE.$$" FOR APPEND AS #2
+PRINT #2, "&" + Nameis$ + "&" + STR$(tmp2) + "H " + STR$(tmp1) + "M " + STR$(tmp0) + "S" + "&" + STR$(touch) + "&"
+CLOSE #2
+
+
+SLEEP
+GOTO Mainmenu
+Er000:
+COLOR 12
+PRINT "Une erreur du fichier des score a ‚t‚ d‚tecter," + CHR$(10) + " veuillez contacter: (Email: Informabox8088@gmail.com)"
+PRINT
+END
+
+SUB fresh
+CLS
+PRINT , , "[" + a$ + "-" + b$ + "-" + c$ + "]"
+PRINT , , "[" + d$ + "-" + e$ + "-" + f$ + "]"
+PRINT , , "[" + g$ + "-" + h$ + "-" + i$ + "]"
+PRINT , , "[" + j$ + "-" + k$ + "-" + l$ + "]"
+PRINT , , "[" + m$ + "-" + n$ + "-" + o$ + "]"
+
+END SUB
+
+SUB tmr (n)
+svtime = TIMER
+DO
+    IF TIMER - svtime < n THEN EXIT DO
+LOOP
+
+END SUB
+
